@@ -1,0 +1,37 @@
+<RCC>
+  <qresource prefix="background">
+    <file>background (3).bmp</file>
+    <file>background (4).bmp</file>
+    <file>background (2).bmp</file>
+    <file>background (1).bmp</file>
+  </qresource>
+  <qresource prefix="buttons">
+    <file>OpenFolder.png</file>
+    <file>OpenFolder_ru.png</file>
+    <file>Parameters.png</file>
+    <file>Parameters_ru.png</file>
+    <file>Play.png</file>
+    <file>Play_ru.png</file>
+    <file>Cancel.png</file>
+    <file>Cancel_ru.png</file>
+    <file>No.png</file>
+    <file>No_ru.png</file>
+    <file>UpdateMod.png</file>
+    <file>UpdateMod_ru.png</file>
+    <file>Yes.png</file>
+    <file>Yes_ru.png</file>
+    <file>Delete.png</file>
+    <file>Delete_ru.png</file>
+    <file>ellipsis.png</file>
+    <file>Install.png</file>
+    <file>Install_ru.png</file>
+    <file>que_mark.png</file>
+    <file>Lang.png</file>
+    <file>Lang_ru.png</file>
+    <file>Refresh.png</file>
+    <file>Refresh_ru.png</file>
+    <file>OK.png</file>
+    <file>CreateProfile.png</file>
+    <file>CreateProfile_ru.png</file>
+  </qresource>
+</RCC>
