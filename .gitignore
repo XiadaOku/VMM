@@ -29,3 +29,13 @@ src/VMM/build/vmm/vmm.exe.manifest
 src/VMM/build/vmm/warn-vmm.txt
 src/VMM/build/vmm/xref-vmm.html
 src/VMM/dist/Vangers Mod Manager.exe
+src/VMM/.idea/discord.xml
+src/VMM/.idea/inspectionProfiles/profiles_settings.xml
+src/VMM/.idea/inspectionProfiles/Project_Default.xml
+src/VMM/.idea/misc.xml
+src/VMM/.idea/modules.xml
+src/VMM/.idea/vcs.xml
+src/VMM/.idea/VMM.iml
+src/VMM/__pycache__/interface.cpython-38.pyc
+src/VMM/__pycache__/resource_rc.cpython-38.pyc
+src/VMM/save

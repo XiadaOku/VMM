@@ -20,6 +20,40 @@ class VMM(QWizardPage, Ui_WizardPage):
         super().__init__()
         self.setupUi(self)
 
+        if "save.txt" in os.listdir(os.getcwd()):
+            lineCount = 0
+
+            file = open('save.txt')
+            for line in file:
+                if lineCount == 0:
+                    if "Lang_ru" in line:
+                        self.lang = "ru"
+                    else:
+                        self.lang = "en"
+                else:
+                    self.mods_array = literal_eval(line)
+                lineCount += 1
+            file.close()
+        elif "save" in os.listdir(os.getcwd()):
+            lineCount = 0
+
+            file = open('save')
+            for line in file:
+                if lineCount == 0:
+                    self.lang = line.replace("\n", "")
+                else:
+                    self.mods_array = literal_eval(line)
+                lineCount += 1
+            file.close()
+        else:
+            self.mods_array = []
+            self.lang = "ru"
+
+        self.langArray = ["ru", "en"]
+        self.langIndex = self.langArray.index(self.lang)
+        self.vmm_version = "1.0.0"
+
+
         self.frame_delFolder.hide()
         self.frame_paramsTransition.hide()
 
@@ -29,24 +63,24 @@ class VMM(QWizardPage, Ui_WizardPage):
         # создание профилей для всех модов при отсутствии сейва (спасибо кэп)
         if "save.txt" not in os.listdir(os.getcwd()) and "save" not in os.listdir(os.getcwd()):
             for mod in self.response:
-                mods_array.append({"name": self.response[mod]["name"], "vangersPath": pathToVangers,
-                                   "mod": mod, "installPath": "", "modVersion": -1})
+                self.mods_array.append({"name": self.response[mod]["name"], "vangersPath": pathToVangers,
+                                        "mod": mod, "installPath": "", "modVersion": -1})
             self.save()
         else:
             # поддержка вммного "стандарта" сейвов
-            for id in range(len(mods_array)):
+            for id in range(len(self.mods_array)):
                 Imods_array = {"name": "Mod", "vangersPath": pathToVangers, "mod": "none",
                                "installPath": "", "modVersion": -1}
-                for key in mods_array[id].keys():
+                for key in self.mods_array[id].keys():
                     try:
-                        Imods_array[key] = mods_array[id][key]
+                        Imods_array[key] = self.mods_array[id][key]
                     except:
                         pass
-                mods_array[id] = Imods_array
+                self.mods_array[id] = Imods_array
 
             self.save()
 
-        for mod in mods_array:
+        for mod in self.mods_array:
             profile = QListWidgetItem(mod["name"])
             profile.setTextAlignment(0)
             profile.setBackground(QColor("#A6A6A6"))
@@ -88,7 +122,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
         file = open('save', 'w')
         file.write(self.lang + "\n")
-        file.write(str(mods_array))
+        file.write(str(self.mods_array))
         file.close()
 
 
@@ -185,17 +219,17 @@ class VMM(QWizardPage, Ui_WizardPage):
         except Exception as msg:
             self.errMsg(msg)
 
-        if vmm_version != vmm_response["version"]:
+        if self.vmm_version != vmm_response["version"]:
             if self.lang == "ru":
                 self.vmmUpdate.setWindowTitle("Обновление VMM")
                 self.vmmUpdate.setText("Доступна новая версия VMM: " + vmm_response["version"] + "\n" +
-                                       vmm_response["description"] + "\n\nТекущая версия: " + vmm_version)
+                                       vmm_response["description"] + "\n\nТекущая версия: " + self.vmm_version)
                 self.button_update.setText("Обновить")
                 self.button_later.setText("Напомнить позже")
             else:
                 self.vmmUpdate.setWindowTitle("VMM update")
                 self.vmmUpdate.setText("A new VMM version is available: " + vmm_response["version"] + "\n" +
-                                       vmm_response["description_en"] + "\n\nCurrent version: " + vmm_version)
+                                       vmm_response["description_en"] + "\n\nCurrent version: " + self.vmm_version)
                 self.button_update.setText("Update")
                 self.button_later.setText("Remind me later")
             self.vmmUpdate.exec()
@@ -246,12 +280,12 @@ class VMM(QWizardPage, Ui_WizardPage):
             self.combo_mods.setCurrentText(self.response[mod_id]["name"])
 
         isOldId = 0
-        for id in range(len(mods_array)):
-            if type(mods_array[id]["mod"]) == int:
-                if mods_array[id]["mod"] == 0:
-                    mods_array[id]["mod"] = "none"
+        for id in range(len(self.mods_array)):
+            if type(self.mods_array[id]["mod"]) == int:
+                if self.mods_array[id]["mod"] == 0:
+                    self.mods_array[id]["mod"] = "none"
                 else:
-                    mods_array[id]["mod"] = list(self.response.keys())[mods_array[id]["mod"] - 1]
+                    self.mods_array[id]["mod"] = list(self.response.keys())[self.mods_array[id]["mod"] - 1]
                 isOldId = 1
         if isOldId:
             self.save()
@@ -262,12 +296,12 @@ class VMM(QWizardPage, Ui_WizardPage):
         profile.setBackground(QColor("#A6A6A6"))
 
         if self.lang == "ru":
-            mods_array.append({"name": "Новый мод", "vangersPath": pathToVangers, "mod": "none",
-                               "installPath": "", "modVersion": -1})
+            self.mods_array.append({"name": "Новый мод", "vangersPath": pathToVangers, "mod": "none",
+                                    "installPath": "", "modVersion": -1})
             profile.setText("Новый мод")
         else:
-            mods_array.append({"name": "New mod", "vangersPath": pathToVangers, "mod": "none",
-                               "installPath": "", "modVersion": -1})
+            self.mods_array.append({"name": "New mod", "vangersPath": pathToVangers, "mod": "none",
+                                    "installPath": "", "modVersion": -1})
             profile.setText("New mod")
         self.list_profiles.addItem(profile)
 
@@ -275,10 +309,10 @@ class VMM(QWizardPage, Ui_WizardPage):
 
     def deleteProfile(self):
         if self.list_profiles.currentItem() and self.list_profiles.currentItem().text() == self.edit_profileName.text():
-            if mods_array[self.list_profiles.currentRow()]["modVersion"]:
+            if self.mods_array[self.list_profiles.currentRow()]["modVersion"]:
                 try:
-                    os.listdir(mods_array[self.list_profiles.currentRow()]["installPath"] +
-                               "/Vangers [" + mods_array[self.list_profiles.currentRow()]["name"] + "]")
+                    os.listdir(self.mods_array[self.list_profiles.currentRow()]["installPath"] +
+                               "/Vangers [" + self.mods_array[self.list_profiles.currentRow()]["name"] + "]")
 
                     self.frame_delFolder.show()
 
@@ -287,20 +321,20 @@ class VMM(QWizardPage, Ui_WizardPage):
                     self.frame_profileOptions.setEnabled(0)
 
                 except FileNotFoundError:
-                    mods_array.pop(self.list_profiles.currentRow())
+                    self.mods_array.pop(self.list_profiles.currentRow())
                     self.list_profiles.takeItem(self.list_profiles.currentRow())
 
                     self.save()
             else:
-                mods_array.pop(self.list_profiles.currentRow())
+                self.mods_array.pop(self.list_profiles.currentRow())
                 self.list_profiles.takeItem(self.list_profiles.currentRow())
 
                 self.save()
 
     def delete_folder(self):
-        shutil.rmtree(mods_array[self.list_profiles.currentRow()]["installPath"] +
-                      "/Vangers [" + mods_array[self.list_profiles.currentRow()]["name"] + "]")
-        mods_array.pop(self.list_profiles.currentRow())
+        shutil.rmtree(self.mods_array[self.list_profiles.currentRow()]["installPath"] +
+                      "/Vangers [" + self.mods_array[self.list_profiles.currentRow()]["name"] + "]")
+        self.mods_array.pop(self.list_profiles.currentRow())
         self.list_profiles.takeItem(self.list_profiles.currentRow())
 
         self.frame_delFolder.hide()
@@ -312,7 +346,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
     # "оставление". отлично же
     def save_folder(self):
-        mods_array.pop(self.list_profiles.currentRow())
+        self.mods_array.pop(self.list_profiles.currentRow())
         self.list_profiles.takeItem(self.list_profiles.currentRow())
 
         self.frame_delFolder.hide()
@@ -449,15 +483,15 @@ class VMM(QWizardPage, Ui_WizardPage):
 
                         self.combo_bat.addItem(list(self.launchFileNames.keys())[file])
 
-                mods_array[self.list_profiles.currentRow()]["name"] = self.edit_profileName.text()
-                mods_array[self.list_profiles.currentRow()]["vangersPath"] = self.edit_pathGame.text()
-                mods_array[self.list_profiles.currentRow()]["mod"] = self.nameToModID[self.combo_mods.currentText()]
-                mods_array[self.list_profiles.currentRow()]["installPath"] = self.edit_pathInstall.text()
+                self.mods_array[self.list_profiles.currentRow()]["name"] = self.edit_profileName.text()
+                self.mods_array[self.list_profiles.currentRow()]["vangersPath"] = self.edit_pathGame.text()
+                self.mods_array[self.list_profiles.currentRow()]["mod"] = self.nameToModID[self.combo_mods.currentText()]
+                self.mods_array[self.list_profiles.currentRow()]["installPath"] = self.edit_pathInstall.text()
                 if self.nameToModID[self.combo_mods.currentText()] != "none":
-                    mods_array[self.list_profiles.currentRow()]["modVersion"] = \
+                    self.mods_array[self.list_profiles.currentRow()]["modVersion"] = \
                         self.response[self.nameToModID[self.combo_mods.currentText()]]["version"]
                 else:
-                    mods_array[self.list_profiles.currentRow()]["modVersion"] = "1"
+                    self.mods_array[self.list_profiles.currentRow()]["modVersion"] = "1"
 
                 self.save()
 
@@ -482,21 +516,21 @@ class VMM(QWizardPage, Ui_WizardPage):
     def play(self):
         if self.list_profiles.currentItem() and self.list_profiles.currentItem().text() == self.edit_profileName.text():
             id = self.list_profiles.currentRow()
-            if mods_array[id]["modVersion"] != -1 and self.combo_bat.currentText() != "":
+            if self.mods_array[id]["modVersion"] != -1 and self.combo_bat.currentText() != "":
                 cwd = os.getcwd()
-                os.chdir(mods_array[id]["installPath"] + "/Vangers [" + mods_array[id]["name"] + "]")
+                os.chdir(self.mods_array[id]["installPath"] + "/Vangers [" + self.mods_array[id]["name"] + "]")
 
                 if sys.platform == "win32":
-                    os.startfile(mods_array[id]["installPath"] + "/Vangers [" + mods_array[id]["name"] +
+                    os.startfile(self.mods_array[id]["installPath"] + "/Vangers [" + self.mods_array[id]["name"] +
                                  "]/" + self.launchFileNames[self.combo_bat.currentText()])
                 elif sys.platform == "linux2":
-                    Popen(["xdg-open", mods_array[id]["installPath"] + "/Vangers [" + mods_array[id]["name"] +
+                    Popen(["xdg-open", self.mods_array[id]["installPath"] + "/Vangers [" + self.mods_array[id]["name"] +
                            "]/" + self.launchFileNames[self.combo_bat.currentText()]])
                 os.chdir(cwd)
             else:
                 text = ""
 
-                if mods_array[id]["modVersion"] == -1:
+                if self.mods_array[id]["modVersion"] == -1:
                     if self.lang == "ru":
                         text += "Мод не установлен\n"
                     else:
@@ -514,7 +548,7 @@ class VMM(QWizardPage, Ui_WizardPage):
     def params(self):
         if self.list_profiles.currentItem() and self.list_profiles.currentItem().text() == self.edit_profileName.text():
             mod_id = self.list_profiles.currentRow()
-            if mods_array[mod_id]["installPath"]:
+            if self.mods_array[mod_id]["installPath"]:
                 self.check_save00.setEnabled(0)
                 self.check_save01.setEnabled(0)
                 self.check_save02.setEnabled(0)
@@ -529,13 +563,13 @@ class VMM(QWizardPage, Ui_WizardPage):
                 self.check_paramsControls.setEnabled(0)
 
                 try:
-                    options = os.listdir(mods_array[mod_id]["installPath"] + "/Vangers [" +
-                                         mods_array[mod_id]["name"] + "]/data")
+                    options = os.listdir(self.mods_array[mod_id]["installPath"] + "/Vangers [" +
+                                         self.mods_array[mod_id]["name"] + "]/data")
                     self.check_paramsOptions.setEnabled("options.dat" in options)
                     self.check_paramsControls.setEnabled("controls.dat" in options)
 
-                    saves = os.listdir(mods_array[mod_id]["installPath"] + "/Vangers [" +
-                                       mods_array[mod_id]["name"] + "]/data/savegame")
+                    saves = os.listdir(self.mods_array[mod_id]["installPath"] + "/Vangers [" +
+                                       self.mods_array[mod_id]["name"] + "]/data/savegame")
                     self.button_openFolder.setEnabled(1)
                     self.check_save00.setEnabled("save00.dat" in saves)
                     self.check_save01.setEnabled("save01.dat" in saves)
@@ -560,7 +594,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
                 self.list_paramsProfiles.clear()
                 for profile in range(self.list_profiles.count()):
-                    new_profile = QListWidgetItem(mods_array[profile]["name"])
+                    new_profile = QListWidgetItem(self.mods_array[profile]["name"])
                     new_profile.setTextAlignment(0)
                     new_profile.setBackground(QColor("#A6A6A6"))
 
@@ -569,10 +603,10 @@ class VMM(QWizardPage, Ui_WizardPage):
 
                     if profile == self.list_profiles.currentRow():
                         continue
-                    if mods_array[profile]["installPath"]:
+                    if self.mods_array[profile]["installPath"]:
                         try:
-                            os.listdir(mods_array[profile]["installPath"] + "/Vangers [" +
-                                       mods_array[profile]["name"] + "]/data/savegame")
+                            os.listdir(self.mods_array[profile]["installPath"] + "/Vangers [" +
+                                       self.mods_array[profile]["name"] + "]/data/savegame")
                             self.list_paramsProfiles.item(profile).setHidden(0)
                         except FileNotFoundError:
                             continue
@@ -612,26 +646,26 @@ class VMM(QWizardPage, Ui_WizardPage):
                 checkedParams.append("controls.dat")
 
             for checked in checkedParams:
-                shutil.copyfile(mods_array[mod_id]["installPath"] + "/Vangers [" + mods_array[mod_id]["name"] +
-                                "]/data/" + checked,
-                                mods_array[self.list_paramsProfiles.currentRow()]["installPath"] + "/Vangers [" +
-                                mods_array[self.list_paramsProfiles.currentRow()]["name"] + "]/data/" + checked)
+                shutil.copyfile(self.mods_array[mod_id]["installPath"] + "/Vangers [" +
+                                self.mods_array[mod_id]["name"] + "]/data/" + checked,
+                                self.mods_array[self.list_paramsProfiles.currentRow()]["installPath"] + "/Vangers [" +
+                                self.mods_array[self.list_paramsProfiles.currentRow()]["name"] + "]/data/" + checked)
 
         self.frame_paramsTransition.hide()
         self.list_profiles.setEnabled(1)
         self.button_createProfile.setEnabled(1)
 
     def profileClicked(self):
-        self.list_profiles.currentItem().setText(mods_array[self.list_profiles.currentRow()]["name"])
-        self.edit_profileName.setText(mods_array[self.list_profiles.currentRow()]["name"])
-        self.edit_pathGame.setText(mods_array[self.list_profiles.currentRow()]["vangersPath"])
-        self.edit_pathInstall.setText(mods_array[self.list_profiles.currentRow()]["installPath"])
+        self.list_profiles.currentItem().setText(self.mods_array[self.list_profiles.currentRow()]["name"])
+        self.edit_profileName.setText(self.mods_array[self.list_profiles.currentRow()]["name"])
+        self.edit_pathGame.setText(self.mods_array[self.list_profiles.currentRow()]["vangersPath"])
+        self.edit_pathInstall.setText(self.mods_array[self.list_profiles.currentRow()]["installPath"])
         self.combo_bat.clear()
 
-        if mods_array[self.list_profiles.currentRow()]["mod"] == "none":
+        if self.mods_array[self.list_profiles.currentRow()]["mod"] == "none":
             self.combo_mods.setCurrentText("None")
         else:
-            self.combo_mods.setCurrentText(self.response[mods_array[self.list_profiles.currentRow()]["mod"]]["name"])
+            self.combo_mods.setCurrentText(self.response[self.mods_array[self.list_profiles.currentRow()]["mod"]]["name"])
 
         self.launchFileNames = {"Windows 32bit (русский)": "Win32_ru.bat", "Windows 64bit (русский)": "Win64_ru.bat",
                                 "Windows 32bit (english)": "Win32_en.bat",
@@ -640,15 +674,15 @@ class VMM(QWizardPage, Ui_WizardPage):
 
         mod_id = self.list_profiles.currentRow()
         for bat in range(len(self.launchFileNames)):
-            if mods_array[self.list_profiles.currentRow()]["mod"] != "none":
-                lresponse = self.response[mods_array[mod_id]["mod"]]["launch"]
+            if self.mods_array[self.list_profiles.currentRow()]["mod"] != "none":
+                lresponse = self.response[self.mods_array[mod_id]["mod"]]["launch"]
                 if lresponse[list(lresponse.keys())[bat]]:
                     self.launchFileNames[list(self.launchFileNames.keys())[bat]] = lresponse[list(lresponse.keys())[bat]]
             self.combo_bat.addItem(list(self.launchFileNames.keys())[bat])
 
-        if mods_array[self.list_profiles.currentRow()]["mod"] != "none":
-            if self.response[mods_array[mod_id]["mod"]]["version"] != \
-                    mods_array[mod_id]["modVersion"] and mods_array[mod_id]["modVersion"] != -1:
+        if self.mods_array[self.list_profiles.currentRow()]["mod"] != "none":
+            if self.response[self.mods_array[mod_id]["mod"]]["version"] != \
+                    self.mods_array[mod_id]["modVersion"] and self.mods_array[mod_id]["modVersion"] != -1:
 
                 if self.lang == "ru":
                     self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
@@ -666,8 +700,8 @@ class VMM(QWizardPage, Ui_WizardPage):
                                                       "background-image: url(:/buttons/Install.png);")
 
     def openFolder(self):
-        path = mods_array[self.list_profiles.currentRow()]["installPath"] + "/Vangers [" + \
-               mods_array[self.list_profiles.currentRow()]["name"] + "]/data/savegame"
+        path = self.mods_array[self.list_profiles.currentRow()]["installPath"] + "/Vangers [" + \
+               self.mods_array[self.list_profiles.currentRow()]["name"] + "]/data/savegame"
         if sys.platform == "win32":
             os.startfile(path)
         elif sys.platform == "linux2":
@@ -730,40 +764,5 @@ if __name__ == '__main__':
         pathToVangers = drive + "/Program Files/Steam/SteamApps/Common/Vangers"
     except:
         pass
-
-    if "save.txt" in os.listdir(os.getcwd()):
-        lineCount = 0
-
-        file = open('save.txt')
-        for line in file:
-            if lineCount == 0:
-                if "Lang_ru" in line:
-                    VMM.lang = "ru"
-                elif "Lang" in line:
-                    VMM.lang = "en"
-                else:
-                    VMM.lang = line.replace("\n", "")
-            else:
-                mods_array = literal_eval(line)
-            lineCount += 1
-        file.close()
-    elif "save" in os.listdir(os.getcwd()):
-        lineCount = 0
-
-        file = open('save')
-        for line in file:
-            if lineCount == 0:
-                VMM.lang = line.replace("\n", "")
-            else:
-                mods_array = literal_eval(line)
-            lineCount += 1
-        file.close()
-    else:
-        mods_array = []
-        VMM.lang = "ru"
-
-    VMM.langArray = ["ru", "en"]
-    VMM.langIndex = VMM.langArray.index(VMM.lang)
-    vmm_version = "1.0.0"
 
     main()
