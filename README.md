@@ -15,9 +15,9 @@ You'll need resources of Vangers to install mods on them.
 
 Resources are given as pack of pictures, qrc and ui files.
 
-You can build them with ordinary pyrcc5 and pyuic5.
+You can build them with pyrcc5 and pyuic5 from PyQt.
 
-There is changes in interface.py file in comparison with pyuic5 result so be careful.
+interface.py doesn't match with pyuic5 .py file so remember to write additional code when changing interface
 
 ## Build ##
 
