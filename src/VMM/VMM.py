@@ -3,12 +3,12 @@ import shutil
 import sys
 import zipfile
 import ctypes
+import webbrowser
 from ast import literal_eval
 from subprocess import Popen
 from requests import get
 from wget import download
 
-from PyQt5.Qt import QUrl, QDesktopServices
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
@@ -408,7 +408,7 @@ class VMM(QWizardPage, Ui_WizardPage):
         self.modDescription.exec()
 
         if mod_id != "none" and self.response[mod_id]["site"] and self.modDescription.clickedButton() == link_button:
-            QDesktopServices.openUrl(QUrl(self.response[mod_id]["site"]))
+            webbrowser.open(self.response[mod_id]["site"])
 
         if mod_id != "none" and self.response[mod_id]["site"]:
             self.modDescription.removeButton(link_button)
