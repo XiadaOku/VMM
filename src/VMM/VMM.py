@@ -215,21 +215,33 @@ class VMM(QWizardPage, Ui_WizardPage):
 
     def refresh(self):
         try:
-            vmm_response = get("https://kiv.name/comod/vmm").json()
+            vmm_response = get("https://api.github.com/repos/XiadaOku/VMM/releases").json()[0]
         except Exception as msg:
             self.errMsg(msg)
 
-        if self.vmm_version != vmm_response["version"]:
+        if self.vmm_version != vmm_response["tag_name"]:
+            text = vmm_response["body"].split("\r\n")
+            try:
+                ind = text.index(f"[{self.lang}]")
+            except:
+                ind = text.index("[ru]")
+
+            description = ""
+            for line in range(ind + 1, len(text)):
+                if text[line] == "":
+                    break
+                description += text[line] + "\n"
+
             if self.lang == "ru":
                 self.vmmUpdate.setWindowTitle("Обновление VMM")
-                self.vmmUpdate.setText("Доступна новая версия VMM: " + vmm_response["version"] + "\n" +
-                                       vmm_response["description"] + "\n\nТекущая версия: " + self.vmm_version)
+                self.vmmUpdate.setText("Доступна новая версия VMM: " + vmm_response["tag_name"] + "\n" +
+                                       description + "\nТекущая версия: " + self.vmm_version)
                 self.button_update.setText("Обновить")
                 self.button_later.setText("Напомнить позже")
             else:
                 self.vmmUpdate.setWindowTitle("VMM update")
-                self.vmmUpdate.setText("A new VMM version is available: " + vmm_response["version"] + "\n" +
-                                       vmm_response["description_en"] + "\n\nCurrent version: " + self.vmm_version)
+                self.vmmUpdate.setText("A new VMM version is available: " + vmm_response["tag_name"] + "\n" +
+                                       description + "\nCurrent version: " + self.vmm_version)
                 self.button_update.setText("Update")
                 self.button_later.setText("Remind me later")
             self.vmmUpdate.exec()
@@ -237,7 +249,7 @@ class VMM(QWizardPage, Ui_WizardPage):
             if self.vmmUpdate.clickedButton() == self.button_update:
                 try:
                     if sys.platform == "win32":
-                        file = download("https://kiv.name/comod/vmm/get/win", os.getcwd())
+                        file = download(vmm_response["assets"][0]["browser_download_url"], os.getcwd())
                     elif sys.platform == "linux2":
                         file = download("https://kiv.name/comod/vmm/get/lin", os.getcwd())
                 except Exception as msg:
