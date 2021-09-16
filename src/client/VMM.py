@@ -263,9 +263,19 @@ class VMM(QWizardPage, Ui_WizardPage):
                 os.remove(file)
 
                 if self.release:
-                    os.system("python src/update.py")
+                    if sys.platform == "win32":
+                        os.system("start python src/update.py")
+                    elif sys.platform == "linux2":
+                        pid = os.fork()
+                        if pid == 0:
+                            os.system("nohup python ./src/update.py &")
                 else:
-                    os.system("python ../client/update.py")
+                    if sys.platform == "win32":
+                        os.system("start python ../client/update.py")
+                    elif sys.platform == "linux2":
+                        pid = os.fork()
+                        if pid == 0:
+                            os.system("nohup python ./../client/update.py &")
                 sys.exit(0)
 
         try:

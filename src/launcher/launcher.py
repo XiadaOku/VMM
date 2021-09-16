@@ -68,15 +68,26 @@ if missing:
 else:
     print("no packages to install")
 
+
 if release:
     file = open("src/release", "w")
     file.write(str(release))
     file.close()
 
-    os.system("python src/VMM.py")
+    if sys.platform == "win32":
+        os.system("start python src/VMM.py")
+    elif sys.platform == "linux2":
+        pid = os.fork()
+        if pid == 0:
+            os.system("nohup python ./src/VMM.py &")
 else:
     file = open("../client/release", "w")
     file.write(str(release))
     file.close()
 
-    os.system("python ../client/VMM.py")
+    if sys.platform == "win32":
+        os.system("start python ../client/VMM.py")
+    elif sys.platform == "linux2":
+        pid = os.fork()
+        if pid == 0:
+            os.system("nohup python ./src/VMM.py &")

@@ -1,4 +1,5 @@
 import os
+import sys
 
 from shutil import move, rmtree
 from time import sleep
@@ -23,4 +24,9 @@ for file in files:
 
 rmtree(os.getcwd()+"/VMM")
 
-os.system("python launcher.py")
+if sys.platform == "win32":
+    os.system("start python launcher.py")
+elif sys.platform == "linux2":
+    pid = os.fork()
+    if pid == 0:
+        os.system("nohup python ./launcher.py &")
