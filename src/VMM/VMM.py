@@ -1,9 +1,12 @@
+import vmm_release
+
 import os
 import shutil
 import sys
 import zipfile
 import ctypes
 import webbrowser
+
 from ast import literal_eval
 from subprocess import Popen
 from requests import get
@@ -248,10 +251,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
             if self.vmmUpdate.clickedButton() == self.button_update:
                 try:
-                    if sys.platform == "win32":
-                        file = download(vmm_response["assets"][0]["browser_download_url"], os.getcwd())
-                    elif sys.platform == "linux2":
-                        file = download("https://kiv.name/comod/vmm/get/lin", os.getcwd())
+                    file = download(vmm_response["assets"][0]["browser_download_url"], os.getcwd())
                 except Exception as msg:
                     self.errMsg(msg)
 
@@ -261,12 +261,12 @@ class VMM(QWizardPage, Ui_WizardPage):
                 except Exception as msg:
                     self.errMsg(msg)
                 zip.close()
-
                 os.remove(file)
-                if sys.platform == "win32":
-                    os.startfile(os.getcwd() + "/update.exe")
-                elif sys.platform == "linux2":
-                    Popen(["xdg-open", os.getcwd() + "/update"])
+
+                if vmm_release.release:
+                    os.system("python src/update.py")
+                else:
+                    os.system("python ../update.py")
                 sys.exit(0)
 
         try:

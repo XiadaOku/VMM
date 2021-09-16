@@ -1,20 +1,26 @@
 import os
+
 from shutil import move, rmtree
-from subprocess import Popen
-from sys import platform
 from time import sleep
 
+
+# чтобы вмм успел закрыться
 sleep(5)
 
 files = os.listdir(os.getcwd()+"/VMM")
-for i in range(len(files)):
-    if files[i].lower() == "update" or files[i].lower() == "update.exe":
+for file in files:
+    if file == "src":
         continue
     else:
-        move(os.getcwd()+"/VMM/"+files[i], os.getcwd()+"/"+files[i])
+        move(os.getcwd()+"/VMM/"+file, os.getcwd()+"/"+file)
+
+files = os.listdir(os.getcwd()+"/VMM/src")
+for file in files:
+    if file == "update.py":
+        continue
+    else:
+        move(os.getcwd()+"/VMM/src/"+file, os.getcwd()+"/src/"+file)
+
 rmtree(os.getcwd()+"/VMM")
 
-if platform == 'win32':
-    os.startfile(os.getcwd()+"/Vangers Mod Manager.exe")
-else:
-    Popen(["xdg-open", os.getcwd()+"/Vangers Mod Manager"])
+os.system("python launcher.py")
