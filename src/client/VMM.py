@@ -266,7 +266,7 @@ class VMM(QWizardPage, Ui_WizardPage):
                 if vmm_release.release:
                     os.system("python src/update.py")
                 else:
-                    os.system("python ../update.py")
+                    os.system("python ../client/update.py")
                 sys.exit(0)
 
         try:

@@ -1,6 +1,6 @@
-import sys
-
 import vmm_release
+
+import sys
 import os
 import platform
 import ssl
@@ -56,7 +56,7 @@ print("upgrading pip")
 check_output(["python", "-m", "pip", "install", "--upgrade", "pip"])
 print("done")
 
-required = open("../VMM/requirements.txt").read().split("\n")
+required = open("../requirements.txt").read().split("\n")
 installed = json.loads(str(check_output(["python", "-m", "pip", "list", "--format", "json"]), "utf-8"))
 missing = set(required) - set(installed[i]["name"] for i in range(len(installed)))
 
@@ -68,4 +68,4 @@ else:
 if vmm_release.release:
     os.system("python src/VMM.py")
 else:
-    os.system("python ../VMM.py")
+    os.system("python ../client/VMM.py")

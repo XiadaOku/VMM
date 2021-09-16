@@ -6,6 +6,7 @@ You'll need resources of Vangers to install mods on them.
 
 ## Dependencies ##
 
+* Python3 >= 3.8.10
 * PyQt5
 * wget
 * requests
@@ -21,6 +22,23 @@ interface.py doesn't match with pyuic5 .py file so remember to write additional 
 
 ## Build ##
 
-You can build VMM and update using pyinstaller \*.spec.
+If you need to build launcher you can use "pyinstaller launcher.spec"
 
-Full set of components: VMM, update, .ico, .ttf.
+In vmm_release.py you can set is it release or not. This will change some paths so if release is true you must do V this V thing 
+
+Release files:
+	
+	launcher.py
+	vmm_release.py
+	
+	launcher.exe
+	launch.sh
+	requirements.txt
+	vmm.ico
+	Vangers.ttf
+
+	src
+		VMM.py
+		interface.py
+		resource_rc.py
+		update.py
