@@ -1,5 +1,3 @@
-import vmm_release
-
 import os
 import shutil
 import sys
@@ -55,6 +53,7 @@ class VMM(QWizardPage, Ui_WizardPage):
         self.langArray = ["ru", "en"]
         self.langIndex = self.langArray.index(self.lang)
         self.vmm_version = "1.0.0"
+        self.release = int(open("release").read())
 
 
         self.frame_delFolder.hide()
@@ -263,7 +262,7 @@ class VMM(QWizardPage, Ui_WizardPage):
                 zip.close()
                 os.remove(file)
 
-                if vmm_release.release:
+                if self.release:
                     os.system("python src/update.py")
                 else:
                     os.system("python ../client/update.py")

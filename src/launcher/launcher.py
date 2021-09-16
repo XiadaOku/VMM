@@ -1,5 +1,3 @@
-import vmm_release
-
 import sys
 import os
 import platform
@@ -38,6 +36,7 @@ def install_python():
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
+release = int(open("release").read())
 
 p = Popen("python --version", shell=True, stdout=PIPE, stderr=PIPE)
 stdout, stderr = p.communicate()
@@ -56,7 +55,11 @@ print("upgrading pip")
 check_output(["python", "-m", "pip", "install", "--upgrade", "pip"])
 print("done")
 
-required = open("../requirements.txt").read().split("\n")
+if release:
+    requirements = "requirements.txt"
+else:
+    requirements = "../requirements.txt"
+required = open(requirements).read().split("\n")
 installed = json.loads(str(check_output(["python", "-m", "pip", "list", "--format", "json"]), "utf-8"))
 missing = set(required) - set(installed[i]["name"] for i in range(len(installed)))
 
@@ -65,7 +68,15 @@ if missing:
 else:
     print("no packages to install")
 
-if vmm_release.release:
+if release:
+    file = open("src/release", "w")
+    file.write(str(release))
+    file.close()
+
     os.system("python src/VMM.py")
 else:
+    file = open("../client/release", "w")
+    file.write(str(release))
+    file.close()
+
     os.system("python ../client/VMM.py")

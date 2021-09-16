@@ -24,16 +24,15 @@ interface.py doesn't match with pyuic5 .py file so remember to write additional 
 
 If you need to build launcher you can use "pyinstaller launcher.spec"
 
-In vmm_release.py you can set is it release or not. This will change some paths so if release is true you must do V this V thing 
+In release you can set is it release or not. This will change some paths so if release is true you must do V this V thing 
 
 Release files:
 	
 	launcher.py
-	vmm_release.py
-	
 	launcher.exe
 	launch.sh
 	requirements.txt
+	release
 	vmm.ico
 	Vangers.ttf
 
