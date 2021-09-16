@@ -52,7 +52,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
         self.langArray = ["ru", "en"]
         self.langIndex = self.langArray.index(self.lang)
-        self.vmm_version = "1.0.0"
+        self.vmm_version = "1.1.0"
         self.release = int(open("release").read())
 
 
@@ -230,7 +230,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
             description = ""
             for line in range(ind + 1, len(text)):
-                if text[line] == "":
+                if len(text[line]) >= 2 and text[line][0] == "[" and text[line][-1] == "]":
                     break
                 description += text[line] + "\n"
 
