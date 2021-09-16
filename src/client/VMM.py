@@ -52,7 +52,7 @@ class VMM(QWizardPage, Ui_WizardPage):
 
         self.langArray = ["ru", "en"]
         self.langIndex = self.langArray.index(self.lang)
-        self.vmm_version = "1.1.0"
+        self.vmm_version = "1.1.0-alpha"
         self.release = int(open("release").read())
 
 
