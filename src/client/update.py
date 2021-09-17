@@ -29,4 +29,4 @@ if sys.platform == "win32":
 elif sys.platform == "linux2":
     pid = os.fork()
     if pid == 0:
-        os.system("nohup python ./launcher.py &")
+        os.system("nohup python3 ./launcher.py &")

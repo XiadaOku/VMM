@@ -7,9 +7,11 @@ You'll need resources of Vangers to install mods on them.
 ## Dependencies ##
 
 * Python3 >= 3.8.10
-* PyQt5
+* pip
 * wget
 * requests
+* PyQt5
+
 * pyinstaller (build)
 
 ## Resources ##

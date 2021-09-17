@@ -38,12 +38,17 @@ def install_python():
 ssl._create_default_https_context = ssl._create_unverified_context
 release = int(open("release").read())
 
-p = Popen("python --version", shell=True, stdout=PIPE, stderr=PIPE)
+if sys.platform == "win32":
+    python = "python"
+else:
+    python = "python3"
+
+p = Popen(f"{python} --version", shell=True, stdout=PIPE, stderr=PIPE)
 stdout, stderr = p.communicate()
 if stderr != b'':
     install_python()
 else:
-    python_version = version(str(stdout, "utf-8")[7:-2])
+    python_version = version(str(stdout, "utf-8")[7:])
     if python_version < version("3.8.10"):
         print("python version:", python_version)
         install_python()
@@ -52,7 +57,7 @@ else:
 
 
 print("upgrading pip")
-check_output(["python", "-m", "pip", "install", "--upgrade", "pip"])
+check_output([python, "-m", "pip", "install", "--upgrade", "pip"])
 print("done")
 
 if release:
@@ -60,11 +65,11 @@ if release:
 else:
     requirements = "../requirements.txt"
 required = open(requirements).read().split("\n")
-installed = json.loads(str(check_output(["python", "-m", "pip", "list", "--format", "json"]), "utf-8"))
+installed = json.loads(str(check_output([python, "-m", "pip", "list", "--format", "json"]), "utf-8"))
 missing = set(required) - set(installed[i]["name"] for i in range(len(installed)))
 
 if missing:
-    check_output(["python", '-m', 'pip', 'install', *missing])
+    check_output([python, '-m', 'pip', 'install', *missing])
 else:
     print("no packages to install")
 
@@ -79,7 +84,7 @@ if release:
     elif sys.platform == "linux2":
         pid = os.fork()
         if pid == 0:
-            os.system("nohup python ./src/VMM.py &")
+            os.system("nohup python3 ./src/VMM.py &")
 else:
     file = open("../client/release", "w")
     file.write(str(release))
@@ -90,4 +95,4 @@ else:
     elif sys.platform == "linux2":
         pid = os.fork()
         if pid == 0:
-            os.system("nohup python ./src/VMM.py &")
+            os.system("nohup python3 ./../client/VMM.py &")

@@ -268,14 +268,14 @@ class VMM(QWizardPage, Ui_WizardPage):
                     elif sys.platform == "linux2":
                         pid = os.fork()
                         if pid == 0:
-                            os.system("nohup python ./src/update.py &")
+                            os.system("nohup python3 ./src/update.py &")
                 else:
                     if sys.platform == "win32":
                         os.system("start python ../client/update.py")
                     elif sys.platform == "linux2":
                         pid = os.fork()
                         if pid == 0:
-                            os.system("nohup python ./../client/update.py &")
+                            os.system("nohup python3 ./../client/update.py &")
                 sys.exit(0)
 
         try:
