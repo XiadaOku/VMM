@@ -53,6 +53,7 @@ else:
         print("python version:", python_version)
         install_python()
     else:
+        print("python version:", python_version)
         print("python version: OK!")
 
 

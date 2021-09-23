@@ -10,13 +10,12 @@ from subprocess import Popen
 from requests import get
 from wget import download
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5 import QtGui, QtWidgets
 
 from interface import Ui_WizardPage
 
 
-class VMM(QWizardPage, Ui_WizardPage):
+class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -24,7 +23,7 @@ class VMM(QWizardPage, Ui_WizardPage):
         if "save.txt" in os.listdir(os.getcwd()):
             lineCount = 0
 
-            file = open('save.txt')
+            file = open('save.txt', encoding="cp1251")
             for line in file:
                 if lineCount == 0:
                     if "Lang_ru" in line:
@@ -38,7 +37,7 @@ class VMM(QWizardPage, Ui_WizardPage):
         elif "save" in os.listdir(os.getcwd()):
             lineCount = 0
 
-            file = open('save')
+            file = open('save', encoding="cp1251")
             for line in file:
                 if lineCount == 0:
                     self.lang = line.replace("\n", "")
@@ -83,9 +82,9 @@ class VMM(QWizardPage, Ui_WizardPage):
             self.save()
 
         for mod in self.mods_array:
-            profile = QListWidgetItem(mod["name"])
+            profile = QtWidgets.QListWidgetItem(mod["name"])
             profile.setTextAlignment(0)
-            profile.setBackground(QColor("#A6A6A6"))
+            profile.setBackground(QtGui.QColor("#A6A6A6"))
             self.list_profiles.addItem(profile)
 
         self.langIndexCheck = -1
@@ -122,7 +121,7 @@ class VMM(QWizardPage, Ui_WizardPage):
         if "save.txt" in os.listdir(os.getcwd()):
             os.remove(os.getcwd()+"/save.txt")
 
-        file = open('save', 'w')
+        file = open("save", "w", encoding="cp1251")
         file.write(self.lang + "\n")
         file.write(str(self.mods_array))
         file.close()
@@ -312,9 +311,9 @@ class VMM(QWizardPage, Ui_WizardPage):
             self.save()
 
     def createProfile(self):
-        profile = QListWidgetItem()
+        profile = QtWidgets.QListWidgetItem()
         profile.setTextAlignment(0)
-        profile.setBackground(QColor("#A6A6A6"))
+        profile.setBackground(QtGui.QColor("#A6A6A6"))
 
         if self.lang == "ru":
             self.mods_array.append({"name": "Новый мод", "vangersPath": pathToVangers, "mod": "none",
@@ -390,7 +389,7 @@ class VMM(QWizardPage, Ui_WizardPage):
                 description = "Оригинальные Вангеры без модов"
             else:
                 if self.response[mod_id]["site"]:
-                    link_button = self.modDescription.addButton("Веб-страница", QMessageBox.ActionRole)
+                    link_button = self.modDescription.addButton("Веб-страница", QtWidgets.QMessageBox.ActionRole)
 
                 description = "[" + self.response[mod_id]["name"] + "]\n\n" + \
                               self.response[mod_id]["description"] + "\n\n" + \
@@ -405,7 +404,7 @@ class VMM(QWizardPage, Ui_WizardPage):
                 description = "Original Vangers without mods"
             else:
                 if self.response[mod_id]["site"]:
-                    link_button = self.modDescription.addButton("Web page", QMessageBox.ActionRole)
+                    link_button = self.modDescription.addButton("Web page", QtWidgets.QMessageBox.ActionRole)
 
                 if self.response[mod_id]["name_en"]:
                     description = "[" + self.response[mod_id]["name_en"] + "]\n\n"
@@ -615,9 +614,9 @@ class VMM(QWizardPage, Ui_WizardPage):
 
                 self.list_paramsProfiles.clear()
                 for profile in range(self.list_profiles.count()):
-                    new_profile = QListWidgetItem(self.mods_array[profile]["name"])
+                    new_profile = QtWidgets.QListWidgetItem(self.mods_array[profile]["name"])
                     new_profile.setTextAlignment(0)
-                    new_profile.setBackground(QColor("#A6A6A6"))
+                    new_profile.setBackground(QtGui.QColor("#A6A6A6"))
 
                     self.list_paramsProfiles.addItem(new_profile)
                     self.list_paramsProfiles.item(profile).setHidden(1)
@@ -733,12 +732,12 @@ class VMM(QWizardPage, Ui_WizardPage):
             self.list_profiles.currentItem().setText(text)
 
     def pathGame(self):
-        folder = QFileDialog.getExistingDirectory()
+        folder = QtWidgets.QFileDialog.getExistingDirectory()
         if folder:
             self.edit_pathGame.setText(folder)
 
     def pathInstall(self):
-        folder = QFileDialog.getExistingDirectory()
+        folder = QtWidgets.QFileDialog.getExistingDirectory()
         if folder:
             self.edit_pathInstall.setText(folder)
 
@@ -750,7 +749,7 @@ def main():
         dpi = ctypes.windll.shcore.GetScaleFactorForDevice(1) / 100
         os.environ["QT_SCREEN_SCALE_FACTORS"] = str(dpi)
 
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = VMM()
     window.show()
     app.exec_()
