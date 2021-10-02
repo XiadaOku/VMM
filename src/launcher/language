@@ -23,7 +23,21 @@
         "img_button_openFolder": "url(:/buttons/OpenFolder_ru.png)",
 
         "check_paramsOptions": "Параметры",
-        "check_paramsControls": "Управление"
+        "check_paramsControls": "Управление",
+
+        "title_vmmUpdate": "Обновление VMM",
+        "txt_vmmUpdate": "Доступна новая версия VMM: %s\n%s\nТекущая версия: %s",
+        "button_update": "Обновить",
+        "button_later": "Напомнить позже",
+
+        "name_newProfile": "Новый мод",
+        "none_description": "Оригинальные Вангеры без модов",
+
+        "err_vangersPath": "Путь к папке Вангеров не указан",
+        "err_installPath": "Путь установки не указан",
+        "err_modInstall": "Мод не установлен",
+        "err_batChosen": "Файл запуска не выбран",
+        "err_folderNotFound": "Папка не найдена"
     },
     "en": {
         "modDescription": "Mod description",
@@ -47,6 +61,20 @@
         "img_button_openFolder": "url(:/buttons/OpenFolder.png)",
 
         "check_paramsOptions": "Options",
-        "check_paramsControls": "Controls"
+        "check_paramsControls": "Controls",
+
+        "title_vmmUpdate": "VMM update",
+        "txt_vmmUpdate": "A new VMM version is available: %s\n%s\nCurrent version: %s",
+        "button_update": "Update",
+        "button_later": "Remind me later",
+
+        "name_newProfile": "New mod",
+        "none_description": "Original Vangers without mods",
+
+        "err_vangersPath": "Vangers folder path not specified",
+        "err_installPath": "Installation path not specified",
+        "err_modInstall": "Mod not installed",
+        "err_batChosen": "Launch file not chosen",
+        "err_folderNotFound": "Folder not found"
     }
 }

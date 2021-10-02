@@ -19,6 +19,9 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         super().__init__()
         self.setupUi(self)
 
+        self.frame_delFolder.hide()
+        self.frame_paramsTransition.hide()
+
         if "save.txt" in os.listdir(os.getcwd()):
             file = open('save.txt', encoding="utf8")
 
@@ -44,19 +47,6 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         self.vmm_version = "1.2.0"
         self.release = int(open("release").read())
 
-
-        self.frame_delFolder.hide()
-        self.frame_paramsTransition.hide()
-
-        self.langArray = ""
-        self.config_language = ""
-        self.nameToModID = {}
-        self.langIndexCheck = -1
-        self.refresh()
-
-        if self.lang not in self.langArray:
-            self.lang = "ru"
-        self.langIndex = self.langArray.index(self.lang)
 
         # создание профилей для всех модов при отсутствии сейва (спасибо кэп)
         if "save.txt" not in os.listdir(os.getcwd()) and "save" not in os.listdir(os.getcwd()):
@@ -84,8 +74,13 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
             profile.setBackground(QtGui.QColor("#A6A6A6"))
             self.list_profiles.addItem(profile)
 
+        self.langArray = ""
+        self.config_language = ""
+        self.nameToModID = {}
+        self.langIndexCheck = -1
+        self.langIndex = -1
         self.currentUpdate = False
-        self.setLanguage()
+        self.refresh()
 
 
         self.button_language.clicked.connect(self.setLanguage)
@@ -191,9 +186,12 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         file = open("language", encoding="utf8")
         self.langArray = json.loads(file.readline())
         self.config_language = json.loads(file.read())
-        if self.langIndexCheck != -1:
-            self.langIndexCheck = -1
-            self.setLanguage()
+        if self.lang not in self.langArray:
+            self.lang = "ru"
+        self.langIndex = self.langArray.index(self.lang)
+
+        self.langIndexCheck = -1
+        self.setLanguage()
 
 
         try:
@@ -214,18 +212,12 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                     break
                 description += text[line] + "\n"
 
-            if self.lang == "ru":
-                self.vmmUpdate.setWindowTitle("Обновление VMM")
-                self.vmmUpdate.setText("Доступна новая версия VMM: " + vmm_response["tag_name"] + "\n" +
-                                       description + "\nТекущая версия: " + self.vmm_version)
-                self.button_update.setText("Обновить")
-                self.button_later.setText("Напомнить позже")
-            else:
-                self.vmmUpdate.setWindowTitle("VMM update")
-                self.vmmUpdate.setText("A new VMM version is available: " + vmm_response["tag_name"] + "\n" +
-                                       description + "\nCurrent version: " + self.vmm_version)
-                self.button_update.setText("Update")
-                self.button_later.setText("Remind me later")
+            self.vmmUpdate.setWindowTitle(self.config_language[self.lang]["title_vmmUpdate"])
+            self.vmmUpdate.setText(self.config_language[self.lang]["txt_vmmUpdate"] %
+                                   (vmm_response["tag_name"], description, self.vmm_version))
+            self.button_update.setText(self.config_language[self.lang]["button_update"])
+            self.button_later.setText(self.config_language[self.lang]["button_later"])
+
             self.vmmUpdate.exec()
 
             if self.vmmUpdate.clickedButton() == self.button_update:
@@ -296,14 +288,10 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         profile.setTextAlignment(0)
         profile.setBackground(QtGui.QColor("#A6A6A6"))
 
-        if self.lang == "ru":
-            self.mods_array.append({"name": "Новый мод", "vangersPath": pathToVangers, "mod": "none",
-                                    "installPath": "", "modVersion": -1})
-            profile.setText("Новый мод")
-        else:
-            self.mods_array.append({"name": "New mod", "vangersPath": pathToVangers, "mod": "none",
-                                    "installPath": "", "modVersion": -1})
-            profile.setText("New mod")
+        self.mods_array.append({"name": self.config_language[self.lang]["name_newProfile"],
+                                "vangersPath": pathToVangers, "mod": "none", "installPath": "", "modVersion": -1})
+        profile.setText(self.config_language[self.lang]["name_newProfile"])
+
         self.list_profiles.addItem(profile)
 
         self.save()
@@ -365,10 +353,10 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
 
     def description(self):
         mod_id = self.nameToModID[self.combo_mods.currentText()]
-        if self.lang == "ru":
-            if mod_id == "none":
-                description = "Оригинальные Вангеры без модов"
-            else:
+        if mod_id == "none":
+            description = self.config_language[self.lang]["none_description"]
+        else:
+            if self.lang == "ru":
                 if self.response[mod_id]["site"]:
                     link_button = self.modDescription.addButton("Веб-страница", QtWidgets.QMessageBox.ActionRole)
 
@@ -380,9 +368,6 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                     description += "Контакты: " + ", ".join(self.response[mod_id]["contacts"]) + "\n\n"
 
                 description += "Версия: " + self.response[mod_id]["version"]
-        else:
-            if mod_id == "none":
-                description = "Original Vangers without mods"
             else:
                 if self.response[mod_id]["site"]:
                     link_button = self.modDescription.addButton("Web page", QtWidgets.QMessageBox.ActionRole)
@@ -500,16 +485,9 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                 text = ""
 
                 if not self.edit_pathGame.text():
-                    if self.lang == "ru":
-                        text += "Путь к папке Вангеров не указан\n"
-                    else:
-                        text += "Vangers folder path not specified\n"
-
+                    text += self.config_language[self.lang]["err_vangersPath"] + "\n"
                 if not self.edit_pathInstall.text():
-                    if self.lang == "ru":
-                        text += "Путь установки не указан"
-                    else:
-                        text += "Installation path not specified"
+                    text += self.config_language[self.lang]["err_installPath"]
 
                 self.infoMessage.setText(text)
                 self.infoMessage.exec()
@@ -532,16 +510,10 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                 text = ""
 
                 if self.mods_array[id]["modVersion"] == -1:
-                    if self.lang == "ru":
-                        text += "Мод не установлен\n"
-                    else:
-                        text += "Mod not installed\n"
+                    text += self.config_language[self.lang]["err_modInstall"] + "\n"
 
                 if self.combo_bat.currentText() == "":
-                    if self.lang == "ru":
-                        text += "Файл запуска не выбран"
-                    else:
-                        text += "Launch file not chosen"
+                    text += self.config_language[self.lang]["err_batChosen"]
 
                 self.infoMessage.setText(text)
                 self.infoMessage.exec()
@@ -582,10 +554,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                     self.check_save07.setEnabled("save07.dat" in saves)
                     self.check_save08.setEnabled("save08.dat" in saves)
                 except FileNotFoundError:
-                    if self.lang == "ru":
-                        self.infoMessage.setText("Папка не найдена")
-                    else:
-                        self.infoMessage.setText("Folder not found")
+                    self.infoMessage.setText(self.config_language[self.lang]["err_folderNotFound"])
                     self.infoMessage.exec()
                     return
 
@@ -613,10 +582,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                             continue
 
             else:
-                if self.lang == "ru":
-                    self.infoMessage.setText("Мод не установлен")
-                else:
-                    self.infoMessage.setText("Mod not installed")
+                self.infoMessage.setText(self.config_language[self.lang]["err_modInstall"])
                 self.infoMessage.exec()
 
     def paramsOk(self):
