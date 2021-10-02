@@ -27,3 +27,4 @@ src/launcher/build/launcher/Analysis-00.toc
 src/launcher/__pycache__/launcher.cpython-38.pyc
 src/launcher/save
 src/client/release
+src/.idea/encodings.xml

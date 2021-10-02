@@ -1,0 +1,52 @@
+["en", "ru"]
+
+{
+    "ru": {
+        "modDescription": "Описание мода",
+        "txt_pathGame": "Путь к папке Вангеров:",
+        "txt_comboMod": "Мод:",
+        "txt_pathInstall": "Путь установки:",
+        "txt_delFolder": "Удалить папку мода?",
+        "txt_copyTo": "Копировать в:",
+
+        "img_button_createProfile": "url(:/buttons/CreateProfile_ru.png)",
+        "img_button_install": "url(:/buttons/Install_ru.png)",
+        "img_button_install-update": "url(:/buttons/UpdateMod_ru.png)",
+        "img_button_delete": "url(:/buttons/Delete_ru.png)",
+        "img_button_refresh": "url(:/buttons/Refresh_ru.png)",
+        "img_button_language": "url(:/buttons/Lang_ru.png)",
+        "img_button_params": "url(:/buttons/Parameters_ru.png)",
+        "img_button_yesDel": "url(:/buttons/Yes_ru.png)",
+        "img_button_noDel": "url(:/buttons/No_ru.png)",
+        "img_button_cancelDel": "url(:/buttons/Cancel_ru.png)",
+        "img_button_play": "url(:/buttons/Play_ru.png)",
+        "img_button_openFolder": "url(:/buttons/OpenFolder_ru.png)",
+
+        "check_paramsOptions": "Параметры",
+        "check_paramsControls": "Управление"
+    },
+    "en": {
+        "modDescription": "Mod description",
+        "txt_pathGame": "Vangers folder path:",
+        "txt_comboMod": "Mod:",
+        "txt_pathInstall": "Install path:",
+        "txt_delFolder": "Delete mod folder?",
+        "txt_copyTo": "Copy to:",
+
+        "img_button_createProfile": "url(:/buttons/CreateProfile.png)",
+        "img_button_install": "url(:/buttons/Install.png)",
+        "img_button_install-update": "url(:/buttons/UpdateMod.png)",
+        "img_button_delete": "url(:/buttons/Delete.png)",
+        "img_button_refresh": "url(:/buttons/Refresh.png)",
+        "img_button_language": "url(:/buttons/Lang.png)",
+        "img_button_params": "url(:/buttons/Parameters.png)",
+        "img_button_yesDel": "url(:/buttons/Yes.png)",
+        "img_button_noDel": "url(:/buttons/No.png)",
+        "img_button_cancelDel": "url(:/buttons/Cancel.png)",
+        "img_button_play": "url(:/buttons/Play.png)",
+        "img_button_openFolder": "url(:/buttons/OpenFolder.png)",
+
+        "check_paramsOptions": "Options",
+        "check_paramsControls": "Controls"
+    }
+}

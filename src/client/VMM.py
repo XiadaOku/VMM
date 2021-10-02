@@ -4,9 +4,8 @@ import sys
 import zipfile
 import ctypes
 import webbrowser
+import json
 
-from ast import literal_eval
-from subprocess import Popen
 from requests import get
 from wget import download
 
@@ -21,45 +20,43 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         self.setupUi(self)
 
         if "save.txt" in os.listdir(os.getcwd()):
-            lineCount = 0
+            file = open('save.txt', encoding="utf8")
 
-            file = open('save.txt', encoding="cp1251")
-            for line in file:
-                if lineCount == 0:
-                    if "Lang_ru" in line:
-                        self.lang = "ru"
-                    else:
-                        self.lang = "en"
-                else:
-                    self.mods_array = literal_eval(line)
-                lineCount += 1
+            if "Lang_ru" in file.readline():
+                self.lang = "ru"
+            else:
+                self.lang = "en"
+            self.mods_array = json.loads(file.read().replace("\'", "\""))
+
             file.close()
-        elif "save" in os.listdir(os.getcwd()):
-            lineCount = 0
 
-            file = open('save', encoding="cp1251")
-            for line in file:
-                if lineCount == 0:
-                    self.lang = line.replace("\n", "")
-                else:
-                    self.mods_array = literal_eval(line)
-                lineCount += 1
+        elif "save" in os.listdir(os.getcwd()):
+            file = open('save', encoding="utf8")
+
+            self.lang = file.readline()[:-1]
+            self.mods_array = json.loads(file.read().replace("\'", "\""))
+
             file.close()
         else:
             self.mods_array = []
             self.lang = "ru"
 
-        self.langArray = ["ru", "en"]
-        self.langIndex = self.langArray.index(self.lang)
-        self.vmm_version = "1.1.0-alpha"
+        self.vmm_version = "1.2.0"
         self.release = int(open("release").read())
 
 
         self.frame_delFolder.hide()
         self.frame_paramsTransition.hide()
 
+        self.langArray = ""
+        self.config_language = ""
         self.nameToModID = {}
+        self.langIndexCheck = -1
         self.refresh()
+
+        if self.lang not in self.langArray:
+            self.lang = "ru"
+        self.langIndex = self.langArray.index(self.lang)
 
         # создание профилей для всех модов при отсутствии сейва (спасибо кэп)
         if "save.txt" not in os.listdir(os.getcwd()) and "save" not in os.listdir(os.getcwd()):
@@ -87,7 +84,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
             profile.setBackground(QtGui.QColor("#A6A6A6"))
             self.list_profiles.addItem(profile)
 
-        self.langIndexCheck = -1
+        self.currentUpdate = False
         self.setLanguage()
 
 
@@ -121,9 +118,9 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         if "save.txt" in os.listdir(os.getcwd()):
             os.remove(os.getcwd()+"/save.txt")
 
-        file = open("save", "w", encoding="cp1251")
+        file = open("save", "w", encoding="utf8")
         file.write(self.lang + "\n")
-        file.write(str(self.mods_array))
+        file.write(json.dumps(self.mods_array, indent=4))
         file.close()
 
 
@@ -131,90 +128,74 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         if self.langIndex == self.langIndexCheck:
             self.langIndex = (self.langIndex + 1) % len(self.langArray)
 
-        self.lang = self.langArray[self.langIndex]
-
-        if self.lang == "en":
-            self.modDescription.setWindowTitle("Mod description")
-
-            self.txt_pathGame.setText("Vangers folder path:")
-            self.txt_comboMod.setText("Mod:")
-            self.txt_pathInstall.setText("Installation path:")
-            self.txt_delFolder.setText("Delete mod folder?")
-            self.txt_copyTo.setText("Copy to:")
-
-            self.button_createProfile.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                    "background-image: url(:/buttons/CreateProfile.png);")
-            if "Install" in self.button_install.styleSheet():
-                self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                  "background-image: url(:/buttons/Install.png);")
-            else:
-                self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                  "background-image: url(:/buttons/UpdateMod.png);")
-            self.button_delete.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                             "background-image: url(:/buttons/Delete.png);")
-            self.button_refresh.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                              "background-image: url(:/buttons/Refresh.png);")
-            self.button_language.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                               "background-image: url(:/buttons/Lang.png);")
-            self.button_yesDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                             "background-image: url(:/buttons/Yes.png);")
-            self.button_noDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                            "background-image: url(:/buttons/No.png);")
-            self.button_params.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                             "background-image: url(:/buttons/Parameters.png);")
-            self.button_cancelDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                "background-image: url(:/buttons/Cancel.png);")
-            self.button_play.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                           "background-image: url(:/buttons/Play.png);")
-            self.button_openFolder.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                 "background-image: url(:/buttons/OpenFolder.png);")
-
-            self.check_paramsOptions.setText("Options")
-            self.check_paramsControls.setText("Controls")
-
+        if self.langIndex >= len(self.langArray):
+            self.lang = "ru"
         else:
-            self.modDescription.setWindowTitle("Описание мода")
+            self.lang = self.langArray[self.langIndex]
 
-            self.txt_pathGame.setText("Путь к папке Вангеров:")
-            self.txt_comboMod.setText("Мод:")
-            self.txt_pathInstall.setText("Путь установки:")
-            self.txt_delFolder.setText("Удалить папку мода?")
-            self.txt_copyTo.setText("Копировать в:")
+        self.modDescription.setWindowTitle(self.config_language[self.lang]["modDescription"])
 
-            self.button_createProfile.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                    "background-image: url(:/buttons/CreateProfile_ru.png);")
-            if "Install" in self.button_install.styleSheet():
-                self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                  "background-image: url(:/buttons/Install_ru.png);")
-            else:
-                self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                  "background-image: url(:/buttons/UpdateMod_ru.png);")
-            self.button_delete.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                             "background-image: url(:/buttons/Delete_ru.png);")
-            self.button_refresh.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                              "background-image: url(:/buttons/Refresh_ru.png);")
-            self.button_language.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                               "background-image: url(:/buttons/Lang_ru.png);")
-            self.button_params.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                             "background-image: url(:/buttons/Parameters_ru.png);")
-            self.button_yesDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                             "background-image: url(:/buttons/Yes_ru.png);")
-            self.button_noDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                            "background-image: url(:/buttons/No_ru.png);")
-            self.button_cancelDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                "background-image: url(:/buttons/Cancel_ru.png);")
-            self.button_play.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                           "background-image: url(:/buttons/Play_ru.png);")
-            self.button_openFolder.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                 "background-image: url(:/buttons/OpenFolder_ru.png);")
+        self.txt_pathGame.setText(self.config_language[self.lang]["txt_pathGame"])
+        self.txt_comboMod.setText(self.config_language[self.lang]["txt_comboMod"])
+        self.txt_pathInstall.setText(self.config_language[self.lang]["txt_pathInstall"])
+        self.txt_delFolder.setText(self.config_language[self.lang]["txt_delFolder"])
+        self.txt_copyTo.setText(self.config_language[self.lang]["txt_copyTo"])
 
-            self.check_paramsOptions.setText("Параметры")
-            self.check_paramsControls.setText("Управление")
+        self.button_createProfile.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                                "background-image: " +
+                                                f"{self.config_language[self.lang]['img_button_createProfile']};")
+        if self.currentUpdate:
+            self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                              "background-image: " +
+                                              f"{self.config_language[self.lang]['img_button_install-update']};")
+        else:
+            self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                              "background-image: " +
+                                              f"{self.config_language[self.lang]['img_button_install']};")
+        self.button_delete.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                         "background-image: " +
+                                         f"{self.config_language[self.lang]['img_button_delete']};")
+        self.button_refresh.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                          "background-image: " +
+                                          f"{self.config_language[self.lang]['img_button_refresh']};")
+        self.button_language.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                           "background-image: " +
+                                           f"{self.config_language[self.lang]['img_button_language']};")
+        self.button_yesDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                         "background-image: " +
+                                         f"{self.config_language[self.lang]['img_button_yesDel']};")
+        self.button_noDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                        "background-image: " +
+                                        f"{self.config_language[self.lang]['img_button_noDel']};")
+        self.button_cancelDel.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                            "background-image: " +
+                                            f"{self.config_language[self.lang]['img_button_cancelDel']};")
+        self.button_params.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                         "background-image: " +
+                                         f"{self.config_language[self.lang]['img_button_params']};")
+        self.button_play.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                       "background-image: " +
+                                       f"{self.config_language[self.lang]['img_button_play']};")
+        self.button_openFolder.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                             "background-image: " +
+                                             f"{self.config_language[self.lang]['img_button_openFolder']};")
+
+        self.check_paramsOptions.setText(self.config_language[self.lang]["check_paramsOptions"])
+        self.check_paramsControls.setText(self.config_language[self.lang]["check_paramsControls"])
+
 
         self.langIndexCheck = self.langIndex
         self.save()
 
     def refresh(self):
+        file = open("language", encoding="utf8")
+        self.langArray = json.loads(file.readline())
+        self.config_language = json.loads(file.read())
+        if self.langIndexCheck != -1:
+            self.langIndexCheck = -1
+            self.setLanguage()
+
+
         try:
             vmm_response = get("https://api.github.com/repos/XiadaOku/VMM/releases").json()[0]
         except Exception as msg:
@@ -264,14 +245,14 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                 if self.release:
                     if sys.platform == "win32":
                         os.system("start python src/update.py")
-                    elif sys.platform == "linux2":
+                    elif sys.platform == "linux":
                         pid = os.fork()
                         if pid == 0:
                             os.system("nohup python3 ./src/update.py &")
                 else:
                     if sys.platform == "win32":
                         os.system("start python ../client/update.py")
-                    elif sys.platform == "linux2":
+                    elif sys.platform == "linux":
                         pid = os.fork()
                         if pid == 0:
                             os.system("nohup python3 ./../client/update.py &")
@@ -543,9 +524,9 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                 if sys.platform == "win32":
                     os.startfile(self.mods_array[id]["installPath"] + "/Vangers [" + self.mods_array[id]["name"] +
                                  "]/" + self.launchFileNames[self.combo_bat.currentText()])
-                elif sys.platform == "linux2":
-                    Popen(["xdg-open", self.mods_array[id]["installPath"] + "/Vangers [" + self.mods_array[id]["name"] +
-                           "]/" + self.launchFileNames[self.combo_bat.currentText()]])
+                elif sys.platform == "linux":
+                    os.system("sudo bash " + self.mods_array[id]["installPath"] + "/Vangers [" +
+                              self.mods_array[id]["name"] + "]/" + self.launchFileNames[self.combo_bat.currentText()])
                 os.chdir(cwd)
             else:
                 text = ""
@@ -704,28 +685,23 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
             if self.response[self.mods_array[mod_id]["mod"]]["version"] != \
                     self.mods_array[mod_id]["modVersion"] and self.mods_array[mod_id]["modVersion"] != -1:
 
-                if self.lang == "ru":
-                    self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                      "background-image: url(:/buttons/UpdateMod_ru.png);")
-                else:
-                    self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                      "background-image: url(:/buttons/UpdateMod.png);")
+                self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                                  "background-image: " +
+                                                  f"{self.config_language[self.lang]['img_button_install-update']};")
+                self.currentUpdate = True
             else:
-
-                if self.lang == "ru":
-                    self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                      "background-image: url(:/buttons/Install_ru.png);")
-                else:
-                    self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
-                                                      "background-image: url(:/buttons/Install.png);")
+                self.button_install.setStyleSheet("background-color: rgba(255, 255, 255, 0);"
+                                                  "background-image: " +
+                                                  f"{self.config_language[self.lang]['img_button_install']};")
+                self.currentUpdate = False
 
     def openFolder(self):
         path = self.mods_array[self.list_profiles.currentRow()]["installPath"] + "/Vangers [" + \
                self.mods_array[self.list_profiles.currentRow()]["name"] + "]/data/savegame"
         if sys.platform == "win32":
             os.startfile(path)
-        elif sys.platform == "linux2":
-            Popen(["xdg-open", path])
+        elif sys.platform == "linux":
+            os.system("xdg-open " + path)
 
     def nameEdited(self, text):
         if self.list_profiles.currentItem():

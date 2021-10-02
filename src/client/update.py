@@ -26,7 +26,7 @@ rmtree(os.getcwd()+"/VMM")
 
 if sys.platform == "win32":
     os.system("start python launcher.py")
-elif sys.platform == "linux2":
+elif sys.platform == "linux":
     pid = os.fork()
     if pid == 0:
         os.system("nohup python3 ./launcher.py &")

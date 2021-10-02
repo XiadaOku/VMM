@@ -61,11 +61,7 @@ print("upgrading pip")
 check_output([python, "-m", "pip", "install", "--upgrade", "pip"])
 print("done")
 
-if release:
-    requirements = "requirements.txt"
-else:
-    requirements = "../requirements.txt"
-required = open(requirements).read().split("\n")
+required = open("requirements.txt").read().split("\n")
 installed = json.loads(str(check_output([python, "-m", "pip", "list", "--format", "json"]), "utf-8"))
 missing = set(required) - set(installed[i]["name"] for i in range(len(installed)))
 
@@ -80,20 +76,11 @@ if release:
     file.write(str(release))
     file.close()
 
-    if sys.platform == "win32":
-        os.system("start python src/VMM.py")
-    elif sys.platform == "linux2":
-        pid = os.fork()
-        if pid == 0:
-            os.system("nohup python3 ./src/VMM.py &")
+    os.system(f"{python} src/VMM.py")
+
 else:
     file = open("../client/release", "w")
     file.write(str(release))
     file.close()
 
-    if sys.platform == "win32":
-        os.system("start python ../client/VMM.py")
-    elif sys.platform == "linux2":
-        pid = os.fork()
-        if pid == 0:
-            os.system("nohup python3 ./../client/VMM.py &")
+    os.system(f"{python} ../client/VMM.py")
