@@ -870,8 +870,8 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
 
 
 def main():
-    # Adding ".." to the PYTHONPATH for themes folder (resource_rc.py files)
-    # can be deleted actually because client version has themes in "." which is in path and for developers pycharm adds ".." to pythonpath...
+    # Adding "." and ".." to the PYTHONPATH for themes folder (resource_rc.py files)
+    sys.path.append(os.path.realpath("."))
     sys.path.append(os.path.realpath(".."))
 
     # одномониторная недоподдержка high-dpi
