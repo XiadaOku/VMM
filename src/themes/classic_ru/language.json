@@ -1,0 +1,107 @@
+{
+    "_readme": [
+        "don't change names, don't change types",
+        "file must be named language.json in theme folder or {language}.json in /languages",
+        "{language} - name of the language that will be in",
+
+        "you can delete readme and comments or write your ones for own theme, also you can name them as you want, ",
+        "even 'hochubeebov' instead of '_readme'",
+
+        "thanks cap"
+    ],
+
+
+    "_comment0": "language that will be used in case of github releases etc.",
+    "outerLanguage": "ru",
+
+    "_comment1": "messageboxes titles",
+    "titles": {
+        "errorMessage": "Ошибка",
+        "infoMessage": "Инфо",
+
+        "vmmUpdate": "Обновление VMM",
+
+        "modDescription": "Описание мода"
+    },
+
+    "_comment2": "any non-editable text objects",
+    "txt": {
+        "pathGame": "Путь к папке Вангеров:",
+        "pathInstall": "Путь установки:",
+        "comboMod": "Мод:",
+
+        "delFolder": "Удалить папку мода?",
+
+        "copyTo": "Копировать в:",
+
+        "comboTheme": "Тема:",
+        "comboLanguage": "Язык:"
+    },
+
+    "_comment3": "mod description",
+    "desc": {
+        "webPage": "Веб-страница",
+
+        "authors": "Авторы: ",
+        "contacts": "Контакты: ",
+        "version": "Версия: "
+    },
+
+    "_comment4": "buttons",
+    "btn": {
+        "createProfile": "",
+
+        "description": "",
+        "install": "",
+        "install-update": "",
+        "refresh": "",
+        "play": "",
+
+        "params": "",
+        "openFolder": "",
+        "paramsOK": "",
+
+        "delete": "",
+        "yesDel": "",
+        "noDel": "",
+        "cancelDel": "",
+
+        "vmmSettings": "",
+        "vmmSettingsOK": "",
+
+        "path_game": "",
+        "path_install": ""
+    },
+
+    "_comment5": "style of the checkboxes",
+    "check": {
+        "paramsOptions": "Параметры",
+        "paramsControls": "Управление"
+    },
+
+    "_comment6": "vmmUpdate elements",
+    "vmmUpdate": {
+        "message": "Доступна новая версия VMM: %s\n%s\nТекущая версия: %s",
+
+        "update": "Обновить",
+        "later": "Напомнить позже"
+    },
+
+    "_comment7": "names of some things",
+    "modName": {
+        "newModName": "Новый мод",
+        "noModName": "Мод",
+        "none_description": "Оригинальные Вангеры без модов"
+    },
+
+    "_comment8": "errors",
+    "error": {
+        "vangersPathNone": "Путь к папке Вангеров не указан",
+        "installPathNone": "Путь установки не указан",
+        "modNotInstalled": "Мод не установлен",
+
+        "batNotChosen": "Файл запуска не выбран",
+
+        "folderNotFound": "Папка не найдена"
+    }
+}

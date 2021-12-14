@@ -6,6 +6,7 @@
     <file>background (1).bmp</file>
   </qresource>
   <qresource prefix="buttons">
+    <file>beeb.png</file>
     <file>OpenFolder.png</file>
     <file>OpenFolder_ru.png</file>
     <file>Parameters.png</file>
@@ -26,8 +27,6 @@
     <file>Install.png</file>
     <file>Install_ru.png</file>
     <file>que_mark.png</file>
-    <file>Lang.png</file>
-    <file>Lang_ru.png</file>
     <file>Refresh.png</file>
     <file>Refresh_ru.png</file>
     <file>OK.png</file>

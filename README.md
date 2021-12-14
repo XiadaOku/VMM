@@ -12,15 +12,11 @@ You'll need resources of Vangers to install mods on them.
 * requests
 * PyQt5
 
-* pyinstaller (build)
+* pyinstaller (build for launcher.exe)
 
 ## Resources ##
 
-Resources are given as pack of pictures, qrc and ui files.
-
-You can build them with pyrcc5 and pyuic5 from PyQt.
-
-interface.py doesn't match with pyuic5 .py file so remember to write additional code when changing interface
+Use pyuic5 to build interface and pyrcc5 to build resources
 
 ## Build ##
 
@@ -43,3 +39,17 @@ Release files:
 		interface.py
 		resource_rc.py
 		update.py
+	
+	themes
+		classic_ru
+			resource_rc.py
+			theme.json
+			language.json
+		classic_en
+			same as classic_ru
+		dark
+			same as classic_ru except it's without language.json (read theme.json)
+	
+	languages
+		ru.json
+		en.json

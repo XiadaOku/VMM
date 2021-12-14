@@ -28,3 +28,7 @@ src/launcher/__pycache__/launcher.cpython-38.pyc
 src/launcher/save
 src/client/release
 src/.idea/encodings.xml
+src/launcher/save.json
+src/themes/classic_en/__pycache__/resource_rc.cpython-38.pyc
+src/themes/classic_ru/__pycache__/resource_rc.cpython-38.pyc
+src/themes/dark/__pycache__/resource_rc.cpython-38.pyc

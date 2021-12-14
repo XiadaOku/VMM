@@ -1,0 +1,167 @@
+{
+    "_readme": [
+        "don't change names, don't change types",
+        "theme file must be named theme.jsonl, resources - resource_rc.py (use pyrcc5 {resources}.qrc -o resource_rc.py)",
+        "reference: https://doc.qt.io/qt-5/stylesheet-reference.html",
+
+        "__all is style for all objects in category",
+        "__all_except is indexes of items in __all which won't be included in object style (additional)",
+
+        "you can delete readme and comments or write your ones for own theme, also you can name them as you want, ",
+        "even 'hochubeebov' instead of '_readme'",
+
+        "thanks cap"
+    ],
+
+
+    "_comment0": "const ('language.jsonl' file in {theme} folder)/dynamic(any language from /languages) language",
+    "constLanguage": false,
+
+    "_comment1": "style of the backgrounds",
+    "bg": {
+        "__all": ["background-color: #121212;"],
+
+        "profiles": {"style": []},
+        "separator": {
+            "__all_except": [0],
+            "style": ["background-color: #272727;"]
+        },
+        "profileOptions": {"style": []},
+
+        "params": {"style": []}
+    },
+
+    "_comment2": "style of the labels/any non-editable text objects",
+    "txt": {
+        "__all": ["color: #CCCCCC;", "font: 14pt \"Vangers Sans Serif\";"],
+
+        "pathGame": {"style": []},
+        "pathInstall": {"style": []},
+        "comboMod": {"style": []},
+
+        "delFolder": {"style": []},
+
+        "copyTo": {"style": []},
+
+        "comboTheme": {"style": []},
+        "comboLanguage": {"style": []},
+        "version": {"style": []}
+    },
+
+    "_comment3": "style of the editable text objects",
+    "lineedit": {
+        "__all": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt \"Vangers Sans Serif\";"],
+
+        "pathGame": {"style": []},
+        "pathInstall": {"style": []},
+        "profileName": {"style": []}
+    },
+
+    "_comment4": "style of the lists",
+    "list": {
+        "__all": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt \"Vangers Sans Serif\";"],
+
+        "paramsProfiles": {"style": []},
+        "profiles": {"style": []}
+    },
+
+    "_comment5": "style of the buttons",
+    "btn": {
+        "__all": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt \"Vangers Sans Serif\";"],
+
+        "createProfile": {
+            "__all_except": [1],
+            "style": ["background-color: #242424;"]
+        },
+
+        "description": {"style": []},
+        "install": {"style": []},
+        "install-update": {
+            "__all_except": [1],
+            "style": ["background-color: #230960;"]
+        },
+        "refresh": {"style": []},
+        "play": {"style": []},
+
+        "params": {"style": []},
+        "openFolder": {"style": []},
+        "paramsOK": {"style": []},
+
+        "delete": {"style": []},
+        "yesDel": {"style": []},
+        "noDel": {"style": []},
+        "cancelDel": {"style": []},
+
+        "vmmSettings": {
+            "__all_except": [1],
+            "style": ["background-color: rgba(255, 255, 255, 0);","background-image: url(:/buttons/vmmSettings.png);"]
+        },
+        "vmmSettingsOK": {"style": []},
+
+        "path_game": {"style": []},
+        "path_install": {"style": []}
+    },
+
+    "_comment6": "style of the comboboxes",
+    "combo": {
+        "__all": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt \"Vangers Sans Serif\";"],
+
+        "bat": {"style": []},
+        "mod": {"style": []},
+        "theme": {"style": []},
+        "language": {"style": []}
+    },
+
+    "_comment7": "style of the checkboxes",
+    "check": {
+        "__all": ["color: #CCCCCC;", "font: 14pt \"Vangers Sans Serif\";"],
+
+        "paramsOptions": {"style": []},
+        "paramsControls": {"style": []},
+        "save00": {"style": []},
+        "save01": {"style": []},
+        "save02": {"style": []},
+        "save03": {"style": []},
+        "save04": {"style": []},
+        "save05": {"style": []},
+        "save06": {"style": []},
+        "save07": {"style": []},
+        "save08": {"style": []}
+    },
+
+    "_comment8": "style of the messageboxes and their elements",
+    "win": {
+        "errorMessage": {
+            "window": ["color: #000000;", "background-color: #CF6679;", "font: 14pt 'Vangers Sans Serif';"],
+            "button": ["color: #CCCCCC;", "background-color: #B00020;", "font: 14pt 'Vangers Sans Serif';"]
+        },
+        "infoMessage": {
+            "window": ["color: #CCCCCC;", "background-color: #121212;", "font: 14pt 'Vangers Sans Serif';"],
+            "button": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt 'Vangers Sans Serif';"]
+        },
+        "vmmUpdate": {
+            "window": ["color: #CCCCCC;", "background-color: #121212;", "font: 14pt 'Vangers Sans Serif';"],
+
+            "update": ["color: #CCCCCC;", "background-color: #1E1E1E;"],
+            "later": ["color: #CCCCCC;", "background-color: #1E1E1E;"]
+        },
+        "modDescription": {
+            "window": ["color: #CCCCCC;", "background-color: #121212;", "font: 14pt 'Vangers Sans Serif';"],
+
+            "button": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt 'Vangers Sans Serif';"],
+            "webpage": ["color: #CCCCCC;", "background-color: #1E1E1E;", "font: 14pt 'Vangers Sans Serif';"]
+        }
+    },
+
+    "_comment9": "color of the elements in lists... (#RRGGBB)",
+    "listelem": {
+        "paramsProfiles": {
+            "background": "#222222",
+            "text": "#CCCCCC"
+        },
+        "profiles": {
+            "background": "#222222",
+            "text": "#CCCCCC"
+        }
+    }
+}

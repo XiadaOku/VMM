@@ -72,15 +72,7 @@ else:
 
 
 if release:
-    file = open("src/release", "w")
-    file.write(str(release))
-    file.close()
-
     os.system(f"{python} src/VMM.py")
 
 else:
-    file = open("../client/release", "w")
-    file.write(str(release))
-    file.close()
-
     os.system(f"{python} ../client/VMM.py")
