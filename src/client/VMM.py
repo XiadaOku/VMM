@@ -13,7 +13,7 @@ from PyQt5 import QtGui, QtWidgets
 
 from interface import Ui_WizardPage
 
-vmm_version = "1.3.0"
+vmm_version = "1.3.1"
 
 
 class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
@@ -533,9 +533,9 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         if mod_id == "none":
             description = self.language_config["modName"]["none_description"]
         else:
-            if self.response[mod_id]["site"] != "":
+            if self.response[mod_id]["site"]:
                 link_button = self.modDescription.addButton(self.language_config["desc"]["webPage"], QtWidgets.QMessageBox.ActionRole)
-                link_button.setStyleSheet("\n".join(self.theme_config["win"]["modDescription"]["webpage"]))
+                link_button.setStyleSheet("\n".join(self.theme_config["win"]["modDescription"]["button"]))
 
             if self.language_config["outerLanguage"] in self.response[mod_id]["name"] and \
                     self.response[mod_id]["name"][self.language_config["outerLanguage"]] != "":
