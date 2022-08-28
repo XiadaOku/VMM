@@ -31,6 +31,16 @@ jobs:
       working-directory: src/launcher
       run: |
         pyinstaller launcher.spec
+    - name: Dist
+      shell: bash
+      run: |
+        mkdir ./dist
+        mkdir ./dist/src
+        cp ./src/launcher/dist/launcher.exe ./dist
+        cp -r ./src/launcher/* ./dist
+        cp -r ./src/themes ./dist
+        cp -r ./src/languages ./dist
+        cp -r ./src/client ./dist/src
     - uses: actions/upload-artifact@v1
       with:
         name: VMM-Release-64
