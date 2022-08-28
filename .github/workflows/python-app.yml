@@ -42,7 +42,7 @@ jobs:
         cp -r ./src/launcher/* ./dist
         cp -r ./src/themes ./dist
         cp -r ./src/languages ./dist
-        cp -r ./src/client ./dist/src
+        cp -r ./src/client/* ./dist/src
         rm -rf ./dist/dist
         rm -rf ./dist/build
     - uses: actions/upload-artifact@v1
