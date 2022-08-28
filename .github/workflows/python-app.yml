@@ -44,4 +44,4 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: VMM-Release-64
-        path: src/launcher/dist
+        path: dist
