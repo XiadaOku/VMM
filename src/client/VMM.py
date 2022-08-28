@@ -13,7 +13,8 @@ from PyQt5 import QtGui, QtWidgets
 
 from interface import Ui_WizardPage
 
-vmm_version = "1.3.1"
+vmm_version = "1.3.2"
+server_addr = "http://kiv.vangers.net/comod"
 
 
 class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
@@ -70,7 +71,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         # создание профилей для всех модов при отсутствии сейва (спасибо кэп)
         if "save.json" not in os.listdir(os.getcwd()) and "save" not in os.listdir(os.getcwd()):
             try:
-                response = get("http://kiv.vangers.net/comod").json()
+                response = get(server_addr).json()
             except Exception as msg:
                 self.errMsg(msg)
 
@@ -419,7 +420,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                 sys.exit(0)
 
         try:
-            self.response = get("http://kiv.vangers.net/comod").json()
+            self.response = get(server_addr).json()
         except Exception as msg:
             self.errMsg(msg)
 
@@ -582,10 +583,10 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
 
                 if self.nameToModID[self.combo_mods.currentText()] != "none":
                     try:
-                        self.response = get("http://kiv.vangers.net/comod").json()
+                        self.response = get(server_addr).json()
                         mod_id = self.nameToModID[self.combo_mods.currentText()]
 
-                        file = download("http://kiv.vangers.net/comod/" + mod_id + "/get", self.edit_pathInstall.text() +
+                        file = download(server_addr + mod_id + "/get", self.edit_pathInstall.text() +
                                         "/Vangers [" + self.edit_profileName.text() + "]")
                     except Exception as msg:
                         self.errMsg(msg)
