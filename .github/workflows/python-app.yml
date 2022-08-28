@@ -29,7 +29,9 @@ jobs:
         pip install pyinstaller requests pyqt5 wget
     - name: Build
       working-directory: src/launcher
+      shell: bash
       run: |
+        echo "1" > ./release
         pyinstaller launcher.spec
     - name: Dist
       shell: bash
@@ -41,6 +43,8 @@ jobs:
         cp -r ./src/themes ./dist
         cp -r ./src/languages ./dist
         cp -r ./src/client ./dist/src
+        rm -rf ./dist/dist
+        rm -rf ./dist/build
     - uses: actions/upload-artifact@v1
       with:
         name: VMM-Release-64
