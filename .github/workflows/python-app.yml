@@ -25,14 +25,13 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
-        sudo apt-get install python3-pyqt5 pyqt5-dev-tools wget
         python -m pip install --upgrade pip
-        pip install pyinstaller requests
+        pip install pyinstaller requests pyqt5
     - name: Build
       working-directory: src/launcher
       run: |
         pyinstaller launcher.spec
     - uses: actions/upload-artifact@v1
       with:
-        name: Vangers-Release-64
+        name: VMM-Release-64
         path: src/launcher/dist
