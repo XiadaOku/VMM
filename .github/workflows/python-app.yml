@@ -32,4 +32,7 @@ jobs:
       working-directory: src/launcher
       run: |
         pyinstaller launcher.spec
-      
+    - uses: actions/upload-artifact@v1
+      with:
+        name: Vangers-Release-64
+        path: src/launcher/dist
