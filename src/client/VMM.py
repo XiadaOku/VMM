@@ -70,7 +70,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
         # создание профилей для всех модов при отсутствии сейва (спасибо кэп)
         if "save.json" not in os.listdir(os.getcwd()) and "save" not in os.listdir(os.getcwd()):
             try:
-                response = get("https://kiv.name/comod").json()
+                response = get("https://kiv.vangers.net/comod").json()
             except Exception as msg:
                 self.errMsg(msg)
 
@@ -419,7 +419,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                 sys.exit(0)
 
         try:
-            self.response = get("https://kiv.name/comod").json()
+            self.response = get("https://kiv.vangers.net/comod").json()
         except Exception as msg:
             self.errMsg(msg)
 
@@ -582,10 +582,10 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
 
                 if self.nameToModID[self.combo_mods.currentText()] != "none":
                     try:
-                        self.response = get("https://kiv.name/comod").json()
+                        self.response = get("https://kiv.vangers.net/comod").json()
                         mod_id = self.nameToModID[self.combo_mods.currentText()]
 
-                        file = download("https://kiv.name/comod/" + mod_id + "/get", self.edit_pathInstall.text() +
+                        file = download("https://kiv.vangers.net/comod/" + mod_id + "/get", self.edit_pathInstall.text() +
                                         "/Vangers [" + self.edit_profileName.text() + "]")
                     except Exception as msg:
                         self.errMsg(msg)
