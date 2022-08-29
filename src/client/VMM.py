@@ -13,7 +13,7 @@ from PyQt5 import QtGui, QtWidgets
 
 from interface import Ui_WizardPage
 
-vmm_version = "1.3.2"
+vmm_version = "1.3.3"
 server_addr = "http://kiv.vangers.net/comod"
 
 
