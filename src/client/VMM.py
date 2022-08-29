@@ -586,8 +586,7 @@ class VMM(QtWidgets.QWizardPage, Ui_WizardPage):
                         self.response = get(server_addr).json()
                         mod_id = self.nameToModID[self.combo_mods.currentText()]
 
-                        file = download(server_addr + mod_id + "/get", self.edit_pathInstall.text() +
-                                        "/Vangers [" + self.edit_profileName.text() + "]")
+                        file = download(f"{server_addr}/{mod_id}/get", f"{self.edit_pathInstall.text()}/Vangers [{self.edit_profileName.text()}]")
                     except Exception as msg:
                         self.errMsg(msg)
 
